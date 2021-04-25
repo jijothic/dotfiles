@@ -180,3 +180,10 @@ XF86MonBrightnessDown
     xbacklight -dec 10
 
 
+# media keys
+
+XF86MonBrightnessUp
+	adjust-brightness +
+
+XF86MonBrightnessDown
+	adjust-brightness -
