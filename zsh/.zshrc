@@ -1,23 +1,26 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-# -- run to get rid of large old sys logs
-# sudo rm /private/var/log/asl/*.asl
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/joel/.oh-my-zsh"
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# @TODO: Switch to my custom theme
-ZSH_THEME="agnoster"
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
-# Bat Theme
-export BAT_THEME="ansi"
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+#ZSH_THEME="robbyrussell"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -38,7 +41,7 @@ export BAT_THEME="ansi"
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -50,6 +53,8 @@ export BAT_THEME="ansi"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
+# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
+# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -65,33 +70,20 @@ export BAT_THEME="ansi"
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
-# use FZF with todoist cli
-source $(brew --prefix)/share/zsh/site-functions/_todoist_fzf
-# shell completion for todoist CLI
-# PROG=todoist source "$GOPATH/src/github.com/urfave/cli/autocomplete/zsh_autocomplete"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions cargo)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-# Change prompt
-prompt_dir () {
-  prompt_segment blue $CURRENT_FG '%2~'
-}
-# Context: user@hostname (who am I and where am I)
-prompt_context() { }
-
 # User configuration
-export MANPAGER='nvim +Man!'
-export BAT_PAGER="less -R"
-export DELTA_PAGER="less -R"
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -101,10 +93,9 @@ export DELTA_PAGER="less -R"
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
-export EDITOR='nvim'
+#   export EDITOR='mvim'
 # fi
-# jq - change colors to show better in gruvbox lite
-export JQ_COLORS="1;30:1;31:1;32:0;37:0;32:1;30:1;30"
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -113,32 +104,23 @@ export JQ_COLORS="1;30:1;31:1;32:0;37:0;32:1;30:1;30"
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
-# aliases
-# alias zshconfig="nvim ~/.zshrc"
-# alias ohmyzsh="nvim ~/.oh-my-zsh"
-bindkey -v
-autoload edit-command-line
-zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
-bindkey "ç" fzf-cd-widget
-bindkey "^F" fzf-cd-widget
-# bindkey "^[a" beginning-of-line
-# bindkey "^[e" end-of-line
-[ -f "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env" ] && source "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env"
-# Setting rg as the default source for fzf
-# export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# use fd instead of rg for file search, rg author says so!
-export FZF_DEFAULT_COMMAND='fd --type f'
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH=$HOME/.config/nvcode/utils/bin:$PATH
+export PATH=/home/$USER/.config/nvcode/utils/bin:$PATH
 
-# Apply the command to CTRL-T
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='--height 64% --layout=reverse --border'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source ~/.iterm2_shell_integration.zsh
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
-# bindkey -r '^T'
-bindkey '^P' fzf-file-widget
-export PATH="/usr/local/opt/llvm/bin:$PATH"
+
+reddit() {
+  local json
+  local url
+  json=$(curl -s -A 'Reddit CLI' "https://www.reddit.com/r/$1/new.json?limit=10" | jq -r '.data.children| .[] | "\(.data.title)\t\(.data.permalink)"')
+  url=$(echo "$json" | fzf --delimiter='\t' --with-nth=1 | cut -f2)
+	if [[ -n $url ]]
+	then
+    open "https://www.reddit.com$url"
+	fi
+}
